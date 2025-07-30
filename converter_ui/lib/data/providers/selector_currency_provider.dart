@@ -4,4 +4,6 @@ final selectedFiatCurrencyCodeProvider = StateProvider<String>((ref) => 'VES');
 final selectedFiatCurrencyFlagProvider = StateProvider<String>((ref) => 'lib/core/assets/fiat_currencies/VES.png');
 
 final selectedCryptoCurrencyCodeProvider = StateProvider<String>((ref) => 'USDT');
-final selectedCryptoCurrencyFlagProvider = StateProvider<String>((ref) => 'lib/core/assets/cripto_currencies/USDT.png');
+final selectedCryptoCurrencyFlagProvider = StateProvider<String>((ref) => 'lib/core/assets/cripto_currencies/TATUM-TRON-USDT.png');
+
+final isLeftCryptoProvider = StateProvider<bool>((ref) => true);

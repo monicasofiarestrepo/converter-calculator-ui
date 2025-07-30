@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:converter_ui/presentation/atom_widgets/currency_option_tile.dart';
 
@@ -17,11 +19,11 @@ void showFiatCurrencySelectorSheet({
       'name': 'Pesos Colombianos (COL\$)',
       'flag': 'lib/core/assets/fiat_currencies/COP.png',
     },
-    {
-      'code': 'ARG',
-      'name': 'Peso Argentino (AR\$)',
-      'flag': 'lib/core/assets/fiat_currencies/ARG.png',
-    },
+    // {
+    //   'code': 'ARG',
+    //   'name': 'Peso Argentino (AR\$)',
+    //   'flag': 'lib/core/assets/fiat_currencies/ARG.png',
+    // },
     {
       'code': 'PEN',
       'name': 'Soles Peruanos (S/)',
@@ -32,11 +34,11 @@ void showFiatCurrencySelectorSheet({
       'name': 'Real Brasileño (R\$)',
       'flag': 'lib/core/assets/fiat_currencies/BRL.png',
     },
-    {
-      'code': 'BOB',
-      'name': 'Boliviano (BOB)',
-      'flag': 'lib/core/assets/fiat_currencies/BOB.png',
-    },
+    // {
+    //   'code': 'BOB',
+    //   'name': 'Boliviano (BOB)',
+    //   'flag': 'lib/core/assets/fiat_currencies/BOB.png',
+    // },
   ];
 
   showModalBottomSheet(

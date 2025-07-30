@@ -5,22 +5,7 @@ import 'package:converter_ui/presentation/atom_widgets/textfield.dart';
 import 'package:converter_ui/presentation/atom_widgets/currency_selector.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
-
-final exchangeRateProvider = FutureProvider.family<double, ExchangeRateParams>((ref, params) async {
-  final response = await Dio().get(
-    'https://74j6q7lg6a.execute-api.eu-west-1.amazonaws.com/stage/orderbook/public/recommendations',
-    queryParameters: {
-      'type': params.type,
-      'cryptoCurrencyId': params.cryptoCurrencyId,
-      'fiatCurrencyId': params.fiatCurrencyId,
-      'amount': params.amount,
-      'amountCurrencyId': params.amountCurrencyId,
-    },
-  );
-
-  final rate = response.data['data']['byPrice']['fiatToCryptoExchangeRate'];
-  return double.tryParse(rate.toString()) ?? 0.0;
-});
+import 'package:converter_ui/data/providers/selector_currency_provider.dart';
 
 class ExchangeRateParams {
   final int type;
@@ -47,29 +32,64 @@ class MainCalculator extends ConsumerStatefulWidget {
 
 class _MainCalculatorState extends ConsumerState<MainCalculator> {
   final amountController = TextEditingController(text: '5.00');
-
-  String fromCode = 'USDT';
-  String toCode = 'VES';
-  String fromFlag = 'lib/core/assets/cripto_currencies/USDT.png';
-  String toFlag = 'lib/core/assets/fiat_currencies/VES.png';
-
-  String selectedCurrency = 'VES';
-  String selectedCriptoCode = 'USDT';
-
   double get amount => double.tryParse(amountController.text) ?? 0.0;
 
+  double? exchangeRate;
+  bool loading = false;
+
+  Future<void> _fetchExchangeRate() async {
+    setState(() => loading = true);
+
+    final isLeftCrypto = ref.read(isLeftCryptoProvider);
+    final selectedFIATCode = ref.read(selectedFiatCurrencyCodeProvider);
+    final selectedCriptoCode = ref.read(selectedCryptoCurrencyCodeProvider);
+
+    final fromCode = isLeftCrypto ? selectedCriptoCode : selectedFIATCode;
+
+    final cryptoCurrencyId = selectedCriptoCode == 'USDT' ? 'TATUM-TRON-USDT' : selectedCriptoCode;
+    final amountCurrencyId = fromCode == 'USDT' ? 'TATUM-TRON-USDT' : fromCode;
+
+    final queryParams = {
+      'type': isLeftCrypto ? 0 : 1,
+      'cryptoCurrencyId': cryptoCurrencyId,
+      'fiatCurrencyId': selectedFIATCode,
+      'amount': amount,
+      'amountCurrencyId': amountCurrencyId,
+    };
+
+    final uri = Uri.https(
+      '74j6q7lg6a.execute-api.eu-west-1.amazonaws.com',
+      '/stage/orderbook/public/recommendations',
+      queryParams.map((k, v) => MapEntry(k, v.toString())),
+    );
+
+    print('🔗 URL completa: $uri');
+
+    try {
+      final response = await Dio().get(uri.toString());
+
+      print('📥 Respuesta completa: ${response.data}');
+
+      final rate = response.data['data']?['byPrice']?['fiatToCryptoExchangeRate'];
+      setState(() => exchangeRate = double.tryParse(rate.toString()));
+    } catch (e) {
+      setState(() => exchangeRate = null);
+      debugPrint('❌ Error fetching exchange rate: $e');
+    } finally {
+      setState(() => loading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final params = ExchangeRateParams(
-      type: 0, // 0 = CRYPTO -> FIAT
-      cryptoCurrencyId: selectedCriptoCode,
-      fiatCurrencyId: selectedCurrency,
-      amount: amount,
-      amountCurrencyId: fromCode,
-    );
+    final isLeftCrypto = ref.watch(isLeftCryptoProvider);
+    final selectedFIATCode = ref.watch(selectedFiatCurrencyCodeProvider);
+    final selectedCriptoCode = ref.watch(selectedCryptoCurrencyCodeProvider);
 
-    final rateAsync = ref.watch(exchangeRateProvider(params));
+    final fromCode = isLeftCrypto ? selectedCriptoCode : selectedFIATCode;
+    final toCode = isLeftCrypto ? selectedFIATCode : selectedCriptoCode;
+
+    final total = (exchangeRate ?? 0) * amount;
 
     return Center(
       child: Container(
@@ -79,17 +99,13 @@ class _MainCalculatorState extends ConsumerState<MainCalculator> {
           color: DoradoColors.white,
           borderRadius: BorderRadius.circular(24),
           boxShadow: const [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 12,
-              offset: Offset(0, 4),
-            ),
+            BoxShadow(color: Colors.black12, blurRadius: 12, offset: Offset(0, 4)),
           ],
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            CurrencySelector(),
+            const CurrencySelector(),
             const SizedBox(height: 20),
             AmountInput(
               prefix: fromCode,
@@ -97,28 +113,19 @@ class _MainCalculatorState extends ConsumerState<MainCalculator> {
               onSuffixTap: () {},
             ),
             const SizedBox(height: 20),
-            rateAsync.when(
-              data: (rate) {
-                final total = rate * amount;
-                return Column(
-                  children: [
-                    _buildSummaryRow('Tasa estimada', '${rate.toStringAsFixed(2)} $toCode'),
-                    const SizedBox(height: 8),
-                    _buildSummaryRow('Recibirás', '${total.toStringAsFixed(2)} $toCode'),
-                  ],
-                );
-              },
-              loading: () => const Text('Cargando tasa...'),
-              error: (e, _) => _buildSummaryRow('Error', 'No se pudo calcular'),
-            ),
+            if (loading)
+              const Text('Cargando tasa...')
+            else ...[
+              _buildSummaryRow('Tasa estimada', exchangeRate != null ? '${exchangeRate!.toStringAsFixed(2)} $toCode' : '--'),
+              const SizedBox(height: 8),
+              _buildSummaryRow('Recibirás', exchangeRate != null ? '${total.toStringAsFixed(2)} $toCode' : '--'),
+            ],
             const SizedBox(height: 8),
             _buildSummaryRow('Tiempo estimado', '≈ 10 Min'),
             const SizedBox(height: 24),
             DoradoButton(
               text: 'Cambiar',
-              onTap: () {
-                // ejecutar lógica de cambio
-              },
+              onTap: _fetchExchangeRate,
             ),
           ],
         ),

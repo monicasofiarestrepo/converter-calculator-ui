@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:converter_ui/core/theme/dorado_colors.dart';
-import 'package:converter_ui/data/providers/fiat_currency_provider.dart';
+import 'package:converter_ui/data/providers/selector_currency_provider.dart';
 import 'package:converter_ui/presentation/components/FIAT_bottom_sheet.dart';
 import 'package:converter_ui/presentation/components/cripto_bottom_sheet.dart';
 
@@ -13,11 +13,18 @@ class CurrencySelector extends ConsumerStatefulWidget {
 }
 
 class _CurrencySelectorState extends ConsumerState<CurrencySelector> {
-  bool _leftIsCrypto = true;
+  late bool _leftIsCrypto;
+
+  @override
+  void initState() {
+    super.initState();
+    _leftIsCrypto = ref.read(isLeftCryptoProvider);
+  }
 
   void _swapCurrencies() {
     setState(() {
       _leftIsCrypto = !_leftIsCrypto;
+      ref.read(isLeftCryptoProvider.notifier).state = _leftIsCrypto;
     });
   }
 
@@ -27,9 +34,9 @@ class _CurrencySelectorState extends ConsumerState<CurrencySelector> {
       context: context,
       selectedCurrencyCode: selectedCode,
       onSelected: (newCode) {
+        print(newCode);
         ref.read(selectedFiatCurrencyCodeProvider.notifier).state = newCode;
-        ref.read(selectedFiatCurrencyFlagProvider.notifier).state =
-            'lib/core/assets/fiat_currencies/${newCode.toUpperCase()}.png';
+        ref.read(selectedFiatCurrencyFlagProvider.notifier).state = 'lib/core/assets/fiat_currencies/${newCode.toUpperCase()}.png';
       },
     );
   }
@@ -40,9 +47,9 @@ class _CurrencySelectorState extends ConsumerState<CurrencySelector> {
       context: context,
       selectedCurrencyCode: selectedCode,
       onSelected: (newCode) {
+        print(newCode);
         ref.read(selectedCryptoCurrencyCodeProvider.notifier).state = newCode;
-        ref.read(selectedCryptoCurrencyFlagProvider.notifier).state =
-            'lib/core/assets/cripto_currencies/${newCode.toUpperCase()}.png';
+        ref.read(selectedCryptoCurrencyFlagProvider.notifier).state = 'lib/core/assets/cripto_currencies/${newCode.toUpperCase()}.png';
       },
     );
   }
@@ -95,8 +102,7 @@ class _CurrencySelectorState extends ConsumerState<CurrencySelector> {
                 ),
               ),
               const SizedBox(width: 4),
-              const Icon(Icons.keyboard_arrow_down_rounded,
-                  size: 24, color: DoradoColors.gray900),
+              const Icon(Icons.keyboard_arrow_down_rounded, size: 24, color: DoradoColors.gray900),
             ],
           ),
         ),
@@ -169,8 +175,7 @@ class _CurrencySelectorState extends ConsumerState<CurrencySelector> {
                   ),
                 ],
               ),
-              child:
-                  const Icon(Icons.compare_arrows_rounded, color: Colors.white, size: 32),
+              child: const Icon(Icons.compare_arrows_rounded, color: Colors.white, size: 32),
             ),
           ),
         ),

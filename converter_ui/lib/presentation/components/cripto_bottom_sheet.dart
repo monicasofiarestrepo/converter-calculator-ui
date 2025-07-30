@@ -10,12 +10,7 @@ void showCriptoCurrencySelectorSheet({
     {
       'code': 'USDT',
       'name': 'Tether (USDT)',
-      'flag': 'lib/core/assets/cripto_currencies/USDT.png',
-    },
-    {
-      'code': 'USDC',
-      'name': 'USD Coin (USDC)',
-      'flag': 'lib/core/assets/cripto_currencies/USDC.png',
+      'flag': 'lib/core/assets/cripto_currencies/TATUM-TRON-USDT.png',
     },
   ];
 
