@@ -1,0 +1,84 @@
+import 'package:flutter/material.dart';
+import 'package:converter_ui/presentation/atom_widgets/currency_option_tile.dart';
+
+void showFiatCurrencySelectorSheet({
+  required BuildContext context,
+  required String selectedCurrencyCode,
+  required void Function(String newCode) onSelected,
+}) {
+  final fiatCurrencies = [
+    {
+      'code': 'VES',
+      'name': 'Bolívares (Bs)',
+      'flag': 'lib/core/assets/fiat_currencies/VES.png',
+    },
+    {
+      'code': 'COP',
+      'name': 'Pesos Colombianos (COL\$)',
+      'flag': 'lib/core/assets/fiat_currencies/COP.png',
+    },
+    {
+      'code': 'ARG',
+      'name': 'Peso Argentino (AR\$)',
+      'flag': 'lib/core/assets/fiat_currencies/ARG.png',
+    },
+    {
+      'code': 'PEN',
+      'name': 'Soles Peruanos (S/)',
+      'flag': 'lib/core/assets/fiat_currencies/PEN.png',
+    },
+    {
+      'code': 'BRL',
+      'name': 'Real Brasileño (R\$)',
+      'flag': 'lib/core/assets/fiat_currencies/BRL.png',
+    },
+    {
+      'code': 'BOB',
+      'name': 'Boliviano (BOB)',
+      'flag': 'lib/core/assets/fiat_currencies/BOB.png',
+    },
+  ];
+
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: Colors.white,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+    ),
+    builder: (context) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 40,
+              height: 4,
+              margin: const EdgeInsets.only(bottom: 12),
+              decoration: BoxDecoration(
+                color: Colors.black26,
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+            const Text('FIAT', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+            const SizedBox(height: 12),
+            ...fiatCurrencies.map((currency) {
+              return CurrencyOptionTile(
+                currencyCode: currency['code']!,
+                currencyName: currency['name']!,
+                flagAsset: currency['flag']!,
+                selected: selectedCurrencyCode == currency['code'],
+                onTap: () {
+                  onSelected(currency['code']!);
+                  Navigator.pop(context);
+                },
+              );
+            }),
+            const SizedBox(height: 8),
+          ],
+        ),
+      );
+    },
+  );
+}
