@@ -13,6 +13,32 @@ A Flutter mini-app for currency conversion, built for a coding interview assignm
 
 ---
 
+## 📌 API Behavior Note
+
+While integrating the currency recommendation endpoint, I found that **requests below a certain amount (in COP) return no data**.
+
+For instance:
+
+- This request returns an empty result:
+  ```
+  amount=1000.0
+  https://74j6q7lg6a.execute-api.eu-west-1.amazonaws.com/stage/orderbook/public/recommendations?type=1&cryptoCurrencyId=TATUM-TRON-USDT&fiatCurrencyId=COP&amount=1000.0&amountCurrencyId=COP
+  → {"data": {}}
+  ```
+
+- But this one returns a valid response:
+  ```
+  amount=20000.0
+  https://74j6q7lg6a.execute-api.eu-west-1.amazonaws.com/stage/orderbook/public/recommendations?type=1&cryptoCurrencyId=TATUM-TRON-USDT&fiatCurrencyId=COP&amount=20000.0&amountCurrencyId=COP
+  → {"data": { byPrice: {...}, ... }}
+  ```
+
+From the successful response, it’s clear that the `limits.fiat.minLimit` is **18938.2**, meaning the API only returns conversion data when the requested amount meets or exceeds this minimum.
+
+Consider this behaviour to exchange small quantities of a currency. 
+
+---
+
 ## 🛠️ Getting Started
 
 ### Prerequisites
@@ -66,14 +92,6 @@ lib/
   data/
     providers/     # State management providers
 ```
-
----
-
-## 📣 Notes
-
-- Built with scalability and maintainability in mind.
-- API integration for real-time exchange rates.
-- UI improvements and code quality enhancements added.
 
 ---
 
