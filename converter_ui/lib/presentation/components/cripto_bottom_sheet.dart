@@ -1,3 +1,4 @@
+import 'package:converter_ui/core/theme/dorado_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:converter_ui/presentation/atom_widgets/currency_option_tile.dart';
 
@@ -16,7 +17,7 @@ void showCriptoCurrencySelectorSheet({
 
   showModalBottomSheet(
     context: context,
-    backgroundColor: Colors.white,
+    backgroundColor: DoradoColors.backgroundWhite,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
     ),
@@ -35,9 +36,9 @@ void showCriptoCurrencySelectorSheet({
                 borderRadius: BorderRadius.circular(4),
               ),
             ),
-            const Text(
+            Text(
               'CRIPTO',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: DoradoColors.textColor),
             ),
             const SizedBox(height: 12),
             ...criptoCurrencies.map((currency) {

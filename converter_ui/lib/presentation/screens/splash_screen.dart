@@ -21,11 +21,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       duration: const Duration(seconds: 2),
     )..repeat(reverse: true);
 
-    _scaleAnimation = Tween<double>(begin: 0.7, end: 1.3).animate(
+    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.2).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
 
-    Future.delayed(const Duration(seconds: 4), () {
+    Future.delayed(const Duration(seconds: 3), () {
       if (!mounted) return;
       Navigator.pushReplacementNamed(context, '/screen1');
     });
@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: DoradoColors.white,
+      backgroundColor: DoradoColors.backgroundWhite,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -53,16 +53,16 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 height: 150,
               ),
             ),
-            const SizedBox(height: 24),
-            // const Text(
-            //   'EL DORADO',
-            //   style: TextStyle(
-            //     fontSize: 32,
-            //     fontWeight: FontWeight.w800,
-            //     color: DoradoColors.primary,
-            //     letterSpacing: 1.5,
-            //   ),
-            // ),
+            const SizedBox(height: 32),
+            Text(
+              'EL DORADO',
+              style: TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.w800,
+                color: DoradoColors.primary,
+                letterSpacing: 1.5,
+              ),
+            ),
           ],
         ),
       ),

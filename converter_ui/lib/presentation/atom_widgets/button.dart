@@ -37,18 +37,20 @@ class DoradoButton extends StatelessWidget {
                   const SizedBox(width: 8),
                   Text(
                     text,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
+                      color: DoradoColors.textColor
                     ),
                   ),
                 ],
               )
             : Text(
                 text,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
+                  color: DoradoColors.textColor
                 ),
               ),
       ),

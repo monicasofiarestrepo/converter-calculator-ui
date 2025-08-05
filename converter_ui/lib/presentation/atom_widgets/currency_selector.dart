@@ -69,7 +69,7 @@ class _CurrencySelectorState extends ConsumerState<CurrencySelector> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: DoradoColors.backgroundWhite,
             borderRadius: BorderRadius.circular(4),
           ),
           child: Text(
@@ -77,7 +77,7 @@ class _CurrencySelectorState extends ConsumerState<CurrencySelector> {
             style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w600,
-              color: DoradoColors.gray900,
+              color: DoradoColors.textColor,
             ),
           ),
         ),
@@ -100,7 +100,7 @@ class _CurrencySelectorState extends ConsumerState<CurrencySelector> {
               Text(
                 code,
                 style:  TextStyle(
-                  color: DoradoColors.gray900,
+                  color: DoradoColors.textColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
                 ),

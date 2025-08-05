@@ -8,14 +8,14 @@ final ThemeData doradoTheme = ThemeData(
     seedColor: DoradoColors.primary,
     primary: DoradoColors.primary,
     secondary: DoradoColors.secondary,
-    surface: DoradoColors.white,
+    surface: DoradoColors.backgroundWhite,
     error: DoradoColors.error,
     brightness: Brightness.light,
   ),
   scaffoldBackgroundColor: DoradoColors.gray100,
   appBarTheme: AppBarTheme(
     backgroundColor: DoradoColors.primary,
-    foregroundColor: DoradoColors.white,
+    foregroundColor: DoradoColors.backgroundWhite,
     elevation: 0,
   ),
   textTheme:  TextTheme(
@@ -29,7 +29,7 @@ final ThemeData doradoTheme = ThemeData(
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       backgroundColor: DoradoColors.primary,
-      foregroundColor: DoradoColors.white,
+      foregroundColor: DoradoColors.backgroundWhite,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),

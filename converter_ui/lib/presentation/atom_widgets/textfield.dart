@@ -67,13 +67,13 @@ class _AmountInputState extends State<AmountInput> {
       controller: widget.controller,
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       cursorColor: DoradoColors.primary,
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 16,
-        color: Colors.black,
+        color: DoradoColors.textColor,
       ),
       decoration: InputDecoration(
         filled: true,
-        fillColor: Colors.white,
+        fillColor: DoradoColors.backgroundWhite,
         contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
