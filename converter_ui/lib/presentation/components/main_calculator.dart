@@ -212,7 +212,7 @@ Future<void> _fetchExchangeRate() async {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style:  TextStyle(fontSize: 16, color: DoradoColors.textColor)),
+        Text(label, style:  TextStyle(fontSize: 16, color: DoradoColors.mutedTextColor)),
         Text(value, style:  TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: DoradoColors.textColor)),
       ],
     );

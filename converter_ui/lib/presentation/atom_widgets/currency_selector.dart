@@ -106,7 +106,7 @@ class _CurrencySelectorState extends ConsumerState<CurrencySelector> {
                 ),
               ),
               const SizedBox(width: 4),
-               Icon(Icons.keyboard_arrow_down_rounded, size: 24, color: DoradoColors.gray900),
+               Icon(Icons.keyboard_arrow_down_rounded, size: 28, color: DoradoColors.mutedTextColor),
             ],
           ),
         ),
@@ -156,7 +156,7 @@ class _CurrencySelectorState extends ConsumerState<CurrencySelector> {
         Container(
           height: 45,
           decoration: BoxDecoration(
-            border: Border.all(color: DoradoColors.primary, width: 2),
+            border: Border.all(color: DoradoColors.primary, width: 3),
             borderRadius: BorderRadius.circular(999),
           ),
         ),
@@ -166,18 +166,11 @@ class _CurrencySelectorState extends ConsumerState<CurrencySelector> {
           child: GestureDetector(
             onTap: _swapCurrencies,
             child: Container(
-              width: 48,
-              height: 48,
+              width: 52,
+              height: 52,
               decoration:  BoxDecoration(
                 shape: BoxShape.circle,
                 color: DoradoColors.primary,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 6,
-                    offset: Offset(0, 3),
-                  ),
-                ],
               ),
               child: const Icon(Icons.compare_arrows_rounded, color: Colors.white, size: 32),
             ),

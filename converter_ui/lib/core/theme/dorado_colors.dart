@@ -8,6 +8,7 @@ class DoradoColors {
   static late Color backgroundWhite;
   static late Color black;
   static late Color textColor;
+  static late Color mutedTextColor;
 
   static late Color gray100;
   static late Color gray200;
@@ -31,6 +32,7 @@ class DoradoColors {
     backgroundWhite = Colors.white;
     black = Colors.black;
     textColor = Colors.black;
+    mutedTextColor = Color(0xFF666666);
 
     gray100 = const Color(0xFFF7FAFC);
     gray200 = const Color(0xFFEDF2F7);
@@ -55,6 +57,7 @@ class DoradoColors {
     backgroundWhite = const Color(0xFF1E1E28);
     black = Colors.black;
     textColor = Colors.white;
+    mutedTextColor = Color(0xFFAAAAAA);
 
     gray100 = const Color(0xFF1A202C);
     gray200 = const Color(0xFF2D3748);

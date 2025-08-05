@@ -74,7 +74,7 @@ class _AmountInputState extends State<AmountInput> {
       decoration: InputDecoration(
         filled: true,
         fillColor: DoradoColors.backgroundWhite,
-        contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+        contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide:  BorderSide(color: DoradoColors.primary, width: 1.5),
