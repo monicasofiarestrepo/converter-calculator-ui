@@ -50,7 +50,7 @@ class DoradoButton extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: DoradoColors.textColor
+                  color: DoradoColors.backgroundWhite
                 ),
               ),
       ),
