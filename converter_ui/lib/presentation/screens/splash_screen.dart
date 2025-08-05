@@ -18,10 +18,10 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 2),
     )..repeat(reverse: true);
 
-    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.2).animate(
+    _scaleAnimation = Tween<double>(begin: 0.7, end: 1.3).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
 
