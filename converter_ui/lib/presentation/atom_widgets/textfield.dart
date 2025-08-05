@@ -36,17 +36,13 @@ class _AmountInputState extends State<AmountInput> {
 
   void _formatText() {
     if (_isFormatting) return;
-
     final original = widget.controller.text;
 
-    // Permitir puntos decimales incompletos como "5." o "1,000.2"
     if (original.endsWith('.') || original.contains(RegExp(r'\.\d{0,2}$'))) {
       return;
     }
-
     _isFormatting = true;
 
-    // Limpiar comas (miles) para parsear
     final cleanText = original.replaceAll(',', '');
 
     final number = double.tryParse(cleanText);
@@ -70,6 +66,7 @@ class _AmountInputState extends State<AmountInput> {
       style: TextStyle(
         fontSize: 16,
         color: DoradoColors.textColor,
+        fontWeight: FontWeight.w600,
       ),
       decoration: InputDecoration(
         filled: true,
