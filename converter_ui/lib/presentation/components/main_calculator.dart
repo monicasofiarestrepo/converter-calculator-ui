@@ -6,6 +6,7 @@ import 'package:converter_ui/presentation/atom_widgets/currency_selector.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dio/dio.dart';
 import 'package:converter_ui/data/providers/selector_currency_provider.dart';
+import 'package:intl/intl.dart';
 
 class ExchangeRateParams {
   final int type;
@@ -31,10 +32,12 @@ class MainCalculator extends ConsumerStatefulWidget {
 }
 
 class _MainCalculatorState extends ConsumerState<MainCalculator> {
-  final amountController = TextEditingController(text: '5.00');
+  final numberFormat = NumberFormat.decimalPattern('es');
+  late final TextEditingController amountController;
   double get amount => double.tryParse(amountController.text) ?? 0.0;
 
   double? exchangeRate;
+  double? estimatedTime;
   bool loading = false;
 
   Future<void> _fetchExchangeRate() async {
@@ -71,13 +74,64 @@ class _MainCalculatorState extends ConsumerState<MainCalculator> {
       print('📥 Respuesta completa: ${response.data}');
 
       final rate = response.data['data']?['byPrice']?['fiatToCryptoExchangeRate'];
-      setState(() => exchangeRate = double.tryParse(rate.toString()));
+      final releaseTime = (response.data['data']?['byPrice']?['offerMakerStats']?['releaseTime'] as num?)?.toDouble() ?? 0.0;
+      final payTime = (response.data['data']?['byPrice']?['offerMakerStats']?['payTime'] as num?)?.toDouble() ?? 0.0;
+
+      setState(() {
+        exchangeRate = double.tryParse(rate.toString());
+        estimatedTime = releaseTime + payTime;
+      });
     } catch (e) {
-      setState(() => exchangeRate = null);
+      setState(() {
+        exchangeRate = null;
+        estimatedTime = null;
+      });
       debugPrint('❌ Error fetching exchange rate: $e');
     } finally {
       setState(() => loading = false);
     }
+  }
+
+  void _resetCalculator() {
+    setState(() {
+      exchangeRate = null;
+      estimatedTime = null;
+
+      final isLeftCrypto = ref.read(isLeftCryptoProvider);
+      final currencyCode = isLeftCrypto ? ref.read(selectedCryptoCurrencyCodeProvider) : ref.read(selectedFiatCurrencyCodeProvider);
+
+      amountController.text = getDefaultAmountForCurrency(currencyCode);
+    });
+  }
+
+  String getDefaultAmountForCurrency(String currencyCode) {
+    switch (currencyCode.toUpperCase()) {
+      case 'COP':
+        return '20000';
+      case 'VES':
+        return '180';
+      case 'PEN':
+        return '19';
+      case 'BRL':
+        return '25';
+      case 'TATUM-TRON-USDT':
+      case 'USDT':
+        return '5';
+      default:
+        return '5';
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    final isLeftCrypto = ref.read(isLeftCryptoProvider);
+    final currencyCode = isLeftCrypto ? ref.read(selectedCryptoCurrencyCodeProvider) : ref.read(selectedFiatCurrencyCodeProvider);
+
+    amountController = TextEditingController(
+      text: getDefaultAmountForCurrency(currencyCode),
+    );
   }
 
   @override
@@ -105,7 +159,10 @@ class _MainCalculatorState extends ConsumerState<MainCalculator> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const CurrencySelector(),
+            CurrencySelector(
+              onSwap: _resetCalculator,
+              onChanged: _resetCalculator,
+            ),
             const SizedBox(height: 20),
             AmountInput(
               prefix: fromCode,
@@ -114,14 +171,17 @@ class _MainCalculatorState extends ConsumerState<MainCalculator> {
             ),
             const SizedBox(height: 20),
             if (loading)
-              const Text('Cargando tasa...')
+             CircularProgressIndicator(color: DoradoColors.primary)
             else ...[
-              _buildSummaryRow('Tasa estimada', exchangeRate != null ? '${exchangeRate!.toStringAsFixed(2)} $toCode' : '--'),
+              _buildSummaryRow(
+                'Tasa estimada',
+                exchangeRate != null ? '${numberFormat.format(exchangeRate)} $toCode' : '--',
+              ),
               const SizedBox(height: 8),
-              _buildSummaryRow('Recibirás', exchangeRate != null ? '${total.toStringAsFixed(2)} $toCode' : '--'),
+              _buildSummaryRow('Recibirás', exchangeRate != null ? '${numberFormat.format(total)} $toCode' : '--'),
+              const SizedBox(height: 8),
+              _buildSummaryRow('Tiempo estimado', '≈ ${estimatedTime?.toStringAsFixed(0) ?? '--'} Min'),
             ],
-            const SizedBox(height: 8),
-            _buildSummaryRow('Tiempo estimado', '≈ 10 Min'),
             const SizedBox(height: 24),
             DoradoButton(
               text: 'Cambiar',

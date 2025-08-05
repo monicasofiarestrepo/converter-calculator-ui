@@ -19,11 +19,6 @@ void showFiatCurrencySelectorSheet({
       'name': 'Pesos Colombianos (COL\$)',
       'flag': 'lib/core/assets/fiat_currencies/COP.png',
     },
-    // {
-    //   'code': 'ARG',
-    //   'name': 'Peso Argentino (AR\$)',
-    //   'flag': 'lib/core/assets/fiat_currencies/ARG.png',
-    // },
     {
       'code': 'PEN',
       'name': 'Soles Peruanos (S/)',
@@ -34,11 +29,7 @@ void showFiatCurrencySelectorSheet({
       'name': 'Real Brasileño (R\$)',
       'flag': 'lib/core/assets/fiat_currencies/BRL.png',
     },
-    // {
-    //   'code': 'BOB',
-    //   'name': 'Boliviano (BOB)',
-    //   'flag': 'lib/core/assets/fiat_currencies/BOB.png',
-    // },
+
   ];
 
   showModalBottomSheet(

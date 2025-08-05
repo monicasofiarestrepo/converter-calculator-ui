@@ -6,7 +6,10 @@ import 'package:converter_ui/presentation/components/FIAT_bottom_sheet.dart';
 import 'package:converter_ui/presentation/components/cripto_bottom_sheet.dart';
 
 class CurrencySelector extends ConsumerStatefulWidget {
-  const CurrencySelector({super.key});
+  const CurrencySelector({super.key, this.onSwap, this.onChanged});
+
+  final VoidCallback? onSwap;
+  final VoidCallback? onChanged;
 
   @override
   ConsumerState<CurrencySelector> createState() => _CurrencySelectorState();
@@ -25,6 +28,7 @@ class _CurrencySelectorState extends ConsumerState<CurrencySelector> {
     setState(() {
       _leftIsCrypto = !_leftIsCrypto;
       ref.read(isLeftCryptoProvider.notifier).state = _leftIsCrypto;
+      widget.onSwap?.call();
     });
   }
 
@@ -34,9 +38,9 @@ class _CurrencySelectorState extends ConsumerState<CurrencySelector> {
       context: context,
       selectedCurrencyCode: selectedCode,
       onSelected: (newCode) {
-        print(newCode);
         ref.read(selectedFiatCurrencyCodeProvider.notifier).state = newCode;
         ref.read(selectedFiatCurrencyFlagProvider.notifier).state = 'lib/core/assets/fiat_currencies/${newCode.toUpperCase()}.png';
+        widget.onChanged?.call();
       },
     );
   }
@@ -47,9 +51,9 @@ class _CurrencySelectorState extends ConsumerState<CurrencySelector> {
       context: context,
       selectedCurrencyCode: selectedCode,
       onSelected: (newCode) {
-        print(newCode);
         ref.read(selectedCryptoCurrencyCodeProvider.notifier).state = newCode;
         ref.read(selectedCryptoCurrencyFlagProvider.notifier).state = 'lib/core/assets/cripto_currencies/${newCode.toUpperCase()}.png';
+        widget.onChanged?.call();
       },
     );
   }
@@ -70,7 +74,7 @@ class _CurrencySelectorState extends ConsumerState<CurrencySelector> {
           ),
           child: Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w600,
               color: DoradoColors.gray900,
@@ -95,14 +99,14 @@ class _CurrencySelectorState extends ConsumerState<CurrencySelector> {
               const SizedBox(width: 12),
               Text(
                 code,
-                style: const TextStyle(
+                style:  TextStyle(
                   color: DoradoColors.gray900,
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
                 ),
               ),
               const SizedBox(width: 4),
-              const Icon(Icons.keyboard_arrow_down_rounded, size: 24, color: DoradoColors.gray900),
+               Icon(Icons.keyboard_arrow_down_rounded, size: 24, color: DoradoColors.gray900),
             ],
           ),
         ),
@@ -164,7 +168,7 @@ class _CurrencySelectorState extends ConsumerState<CurrencySelector> {
             child: Container(
               width: 48,
               height: 48,
-              decoration: const BoxDecoration(
+              decoration:  BoxDecoration(
                 shape: BoxShape.circle,
                 color: DoradoColors.primary,
                 boxShadow: [
